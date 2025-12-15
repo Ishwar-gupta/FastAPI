@@ -59,7 +59,7 @@ def update_patient_data(name:str,age:int):
 
 """
 
-from pydantic import BaseModel,EmailStr,AnyUrl,Field
+from pydantic import BaseModel,EmailStr,AnyUrl,Field,field_validator
 from typing import List,Dict,Optional,Annotated
 
 class Patient(BaseModel):  #it shows pydantic model
@@ -75,6 +75,19 @@ class Patient(BaseModel):  #it shows pydantic model
     # allergies:Optional[List[str]] =None  # Optional is used for making data optional if patient doesn't have this prblm
     allergies:Annotated[List[str],Field(default=None,max_length=5)]
     contact_details:dict[str,str]
+
+    # @field_validator('email')
+    # @classmethod
+
+    # def email_validator(cls,value):
+    #    valid_domains=['hdfc.com','icici.com']
+    #    # abc@gmail.com
+    #    domain_name=value.split("@")[-1] 
+
+    #    if domain_name not in valid_domains:
+    #       raise ValueError("Not a valid domain.")
+       
+    #    return value     # this gives error becoz only hdfc.com or icici.com valid email after chararcter @
 
 def insert_patient_data(patient:Patient):
    print(patient.name)
