@@ -56,7 +56,7 @@ def save_data(data):
         
 
 @app.get("/")
-def hello():
+def description():
     return {'message':'Patient Management System API'}
 
 @app.get('/about')
@@ -159,6 +159,9 @@ def delete_patient(patient_id: str):
     save_data(data)
 
     return JSONResponse(status_code=200, content={'message':'patient deleted'})
+
+
+
 
 
 
