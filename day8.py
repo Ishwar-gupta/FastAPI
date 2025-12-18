@@ -31,14 +31,14 @@ def get_details():
     return my_posts
 
 # decorator for post request
-@app.post("/create_Posts")
+@app.post("/create_Posts",status_code=status.HTTP_201_CREATED)
 def create_posts(post:Post):  # here post is request body data and Post is pydantic model
     post_dict=post.dict()   # here pydantic obj is converted into python dictionary
     post_dict['id']=randrange(0,50)  # generate random id from 0 to 49
     my_posts.append(post_dict)   # appending the new_post into the previous my_post dictionary
     return post_dict    # send the newly created post back to the client
 
-@app.post("/unique_posts")
+@app.post("/unique_posts",status_code=status.HTTP_201_CREATED)
 def unique_post_creation(unique_posts:Post):
     # checking duplicate title if already exists then raise error
     for existing_posts in my_posts:
@@ -89,4 +89,24 @@ def get_posts(id:int):
 def get_latest_posts():
     post=my_posts[len(my_posts)-1]  # this will show top of the stack
     return {"details":post}
+
+
+def find_index_post(id:input):
+    for i , p in enumerate(my_posts): # this gives index and value both at a time
+        if p['id']==id:
+            return i
+        
+
+# for deleting the existing posts
+
+@app.delete("/delete_posts/{id}",status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(id:int):
+    # deleting post
+    # find the index in the arrau that has required ID
+    # my_posts.pop(index)
+    index=find_index_post(id)
+    if index ==None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"post with id {id} doesn't exists.")
+    my_posts.pop(index)
+    return {"message":f"The post having id {index+1} was deleted successfully"}
 
