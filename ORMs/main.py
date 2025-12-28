@@ -62,7 +62,7 @@ def update_post(id:int,updated_post:Post, db:Session=Depends(get_db)):
     post_query=db.query(models.Post).filter(models.Post.id==id)
     post=post_query.first()
 
-    if post == None:
+    if post == None: # if post doesn't exists
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"post with id: {id} doesn't exists.")
     
     post_query.update(updated_post.model_dump(),synchronize_session=False)
