@@ -28,7 +28,7 @@ def test_posts(db: Session= Depends(get_db)):
 @app.get("/posts/{id}")
 def get_post(id:int,db:Session=Depends(get_db)):
    post= db.query(models.Post).filter(models.Post.id==id).first()
-   print(post)
+#    print(post)
    
    if not post:
       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"post with id: {id} was not found.")
@@ -39,7 +39,7 @@ def get_post(id:int,db:Session=Depends(get_db)):
 @app.post("/posts",status_code=status.HTTP_201_CREATED)
 def create_posts(post:Post,db:Session=Depends(get_db)):
     new_post=models.Post(**post.model_dump())
-    db.add(new_post)
+    db.add(new_post) 
     db.commit()
     db.refresh(new_post)  # returning back
     return {"data":new_post}
